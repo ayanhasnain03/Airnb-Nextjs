@@ -5,6 +5,7 @@ import Navbar from "./components/navbar/Navbar";
 import ClientOnly from "./components/ClientOnly";
 import RegisterModal from "./components/modals/RegisterModal";
 import ToasterProvider from "./providers/ToasterProvider";
+import LoginModal from "../app/components/modals/LoginModal";
 export const metadata: Metadata = {
   title: "Aribnb",
   description: "Airbnb clone",
@@ -25,6 +26,7 @@ export default function RootLayout({
           on the client side. This can be useful in scenarios where the Navbar
           should not be rendered on the server side. */}
           <ToasterProvider />
+          <LoginModal />
           <RegisterModal />
           <Navbar />
         </ClientOnly>
