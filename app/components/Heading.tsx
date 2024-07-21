@@ -1,9 +1,11 @@
 "use client";
+
 interface HeadingProps {
   title: string;
-  subtitle: string;
-  center: string;
+  subtitle?: string;
+  center?: boolean;
 }
+
 const Heading: React.FC<HeadingProps> = ({ title, subtitle, center }) => {
   return (
     <div className={center ? "text-center" : "text-start"}>
@@ -12,4 +14,5 @@ const Heading: React.FC<HeadingProps> = ({ title, subtitle, center }) => {
     </div>
   );
 };
+
 export default Heading;

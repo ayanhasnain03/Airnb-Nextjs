@@ -3,6 +3,7 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/navbar/Navbar";
 import ClientOnly from "./components/ClientOnly";
+import RentModal from "./components/modals/RentModal";
 import RegisterModal from "./components/modals/RegisterModal";
 import ToasterProvider from "./providers/ToasterProvider";
 import LoginModal from "../app/components/modals/LoginModal";
@@ -29,6 +30,7 @@ export default async function RootLayout({
           on the client side. This can be useful in scenarios where the Navbar
           should not be rendered on the server side. */}
           <ToasterProvider />
+          <RentModal />
           <LoginModal />
           <RegisterModal />
           <Navbar currentUser={currentUser} />
