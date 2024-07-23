@@ -9,6 +9,7 @@ import Modal from "./Modal";
 import Input from "../inputs/input";
 import toast from "react-hot-toast";
 import Button from "../Button";
+import Heading from "../Heading";
 
 const RegisterModal = () => {
   const RegisterModal = useRegisterModal();
@@ -26,16 +27,19 @@ const RegisterModal = () => {
   });
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
+    console.log(data);
     axios
       .post("/api/register", data)
       .then(() => RegisterModal.onClose())
       .catch((error) => {
         toast.error("Something went wrong");
+        console.log(error);
       })
       .finally(() => setIsLoading(false));
   };
   const bodyContent = (
     <div className="flex flex-col gap-4">
+      <Heading title="Welcome to Airbnb" subtitle="Create an account!" />
       <Input
         id="name"
         label="Name"
