@@ -1,70 +1,88 @@
 "use client";
-import useCountries from "@/app/hooks/useCountries";
+
 import { SafeUser } from "@/app/types";
-import { Listing, Reservation } from "@prisma/client";
+
 import { useRouter } from "next/navigation";
+
+import useCountries from "@/app/hooks/useCountries";
 import { useCallback, useMemo } from "react";
+
 import { format } from "date-fns";
 import Image from "next/image";
 import HeartButton from "../HeartButton";
 import Button from "../Button";
+import { Listing, Reservation } from "@prisma/client";
 
 interface ListingCardProps {
-  data: Listing;
+  currentUser?: SafeUser | null;
   reservation?: Reservation;
+  data: Listing;
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
   actionId?: string;
-  currentUser: SafeUser | null;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
-  data,
-  reservation,
-  onAction,
-  disabled = false,
-  actionLabel,
-  actionId,
   currentUser,
+  reservation,
+  data,
+  onAction,
+  disabled,
+  actionLabel,
+  actionId = "",
 }) => {
   const router = useRouter();
   const { getByValue } = useCountries();
+
   const location = getByValue(data.locationValue);
 
   const handleCancel = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
+      //To stop further propagation
       e.stopPropagation();
 
-      if (disabled || !onAction) return;
+      //If card is disabled dont do anything
+      if (disabled) {
+        return;
+      }
 
-      onAction(actionId!);
+      //Else call the action
+      onAction?.(actionId);
     },
     [onAction, actionId, disabled]
   );
 
+  //Calculation the price
   const price = useMemo(() => {
-    return reservation ? reservation.totalPrice : data.price;
+    if (reservation) {
+      return reservation.totalPrice;
+    }
+
+    return data.price;
   }, [reservation, data.price]);
 
   const reservationDate = useMemo(() => {
-    if (!reservation) return null;
+    if (!reservation) {
+      return null;
+    }
 
     const start = new Date(reservation.startDate);
     const end = new Date(reservation.endDate);
+
     return `${format(start, "PP")} - ${format(end, "PP")}`;
   }, [reservation]);
 
   return (
     <div
-      onClick={() => router.push(`/listing/${data.id}`)}
+      onClick={() => router.push(`/listings/${data.id}`)}
       className="col-span-1 cursor-pointer group"
     >
       <div className="flex flex-col gap-2 w-full">
         <div className="aspect-square w-full relative overflow-hidden rounded-xl">
           <Image
             fill
-            alt="listing"
+            alt="Listing"
             src={data.imageSrc}
             className="object-cover h-full w-full group-hover:scale-110 transition"
           />
@@ -73,13 +91,13 @@ const ListingCard: React.FC<ListingCardProps> = ({
           </div>
         </div>
         <div className="font-semibold text-lg">
-          {location?.region}, {location?.label}
+          {location?.region},{location?.label}
         </div>
         <div className="font-light text-neutral-500">
           {reservationDate || data.category}
         </div>
         <div className="flex flex-row items-center gap-1">
-          <div className="font-semibold">$ {price}</div>
+          <div className="font-semibold">${price}</div>
           {!reservation && <div className="font-light">night</div>}
         </div>
         {onAction && actionLabel && (
