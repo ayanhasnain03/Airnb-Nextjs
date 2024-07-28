@@ -81,9 +81,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
       <div className="flex flex-col gap-2 w-full">
         <div className="aspect-square w-full relative overflow-hidden rounded-xl">
           <Image
-            fill
             alt="Listing"
+            height={200}
+            width={200}
             src={data.imageSrc}
+            priority
             className="object-cover h-full w-full group-hover:scale-110 transition"
           />
           <div className="absolute top-3 right-3">
