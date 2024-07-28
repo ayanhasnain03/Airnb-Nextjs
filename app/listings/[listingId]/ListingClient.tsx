@@ -3,13 +3,21 @@ import ClientOnly from "@/app/components/ClientOnly";
 import ListingHead from "@/app/components/listings/ListingHead";
 import ListingInfo from "@/app/components/listings/ListingInfo";
 import { categories } from "@/app/components/navbar/Categories";
+import useLoginModal from "@/app/hooks/useLoginModal";
 import { SafeUser } from "@/app/types";
 import { Listing, Reservation } from "@prisma/client";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
+
+const initialDateRange = {
+  startDate: new Date(),
+  endDate: new Date(),
+  key: "selection",
+};
 
 interface ListingClientProps {
   reservations?: Reservation[];
-  listing: Listing & {
+  listing: any & {
     user: SafeUser;
   };
   currentUser: SafeUser | null;
@@ -18,6 +26,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
   listing,
   currentUser,
 }) => {
+  const loginModel = useLoginModal();
+  const router = useRouter();
+
   const category = useMemo(() => {
     // Use optional chaining to safely access the category property
     return categories.find((item) => item.label === listing?.category);
