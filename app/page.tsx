@@ -3,8 +3,7 @@ import Container from "./components/Container";
 import EmptyState from "./components/EmptyState";
 import getListing from "./actions/getListing";
 import ListingCard from "./components/listings/ListingCard";
-import getCurrentUser from "@/app/actions/getCurrentUser";
-
+import { getCurrentUser } from "./actions/getcurrentUser";
 export default async function Home() {
   const listings = await getListing();
   const currentUser = await getCurrentUser();
